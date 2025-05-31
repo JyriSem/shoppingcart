@@ -2,10 +2,10 @@ package com.example.shoppingcart.service;
 
 import com.example.shoppingcart.model.User;
 import com.example.shoppingcart.repository.UserRepository;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import java.util.List;
 

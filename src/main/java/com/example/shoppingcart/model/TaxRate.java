@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 @Table(name = "tax_rate")
 public class TaxRate {
     @Id
-    private Long id = 1L; // Single row for tax rate
+    private Long id = 1L;
 
     private double rate;
 

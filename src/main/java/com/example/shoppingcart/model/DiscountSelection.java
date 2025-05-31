@@ -4,7 +4,6 @@ public class DiscountSelection {
     private String name;
     private double discountPercent;
 
-    // Constructors
     public DiscountSelection() {
     }
 
@@ -13,7 +12,6 @@ public class DiscountSelection {
         this.discountPercent = discountPercent;
     }
 
-    // Getters and setters
     public String getName() {
         return name;
     }

@@ -37,7 +37,7 @@ public class CartService {
     private double getTaxRate() {
         return taxRateRepository.findById(1L)
                 .map(TaxRate::getRate)
-                .orElse(22.0); // Fallback if not set
+                .orElse(22.0);
     }
 
     public void addProduct(CartItem item) {
