@@ -12,9 +12,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.ServletException;
 import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService userDetailsService;
 
@@ -49,7 +52,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
                     }
                 }
             } catch (Exception e) {
-                // Log error if needed
+                logger.error("JWT validation failed: {}", e.getMessage());
             }
         }
         chain.doFilter(request, response);

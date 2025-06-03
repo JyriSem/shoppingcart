@@ -1,3 +1,10 @@
+--For large datasets, add an index on discount_id if queries become slow:
+CREATE INDEX idx_cart_items_discount_id ON cart_items(discount_id);
+-- Count the number of cart items per discount_id
+SELECT discount_id, COUNT(*) FROM cart_items GROUP BY discount_id;
+-- Count the number of cart items per user
+SELECT name, discount_id FROM cart_items WHERE user_id = (SELECT id FROM users WHERE username = 'user');
+
 -- Delete a user from the users table
 DELETE FROM users WHERE username = 'desired_username';
 -- Revalue the discount percentage for a specific discount
@@ -80,3 +87,7 @@ ON CONFLICT DO NOTHING;
 
 --structure for the table
 --          ┌ ┐─│└ ┘├ ┤ ┬ ┴ ┼
+
+-- Update cart_items table: set default discount_id to 1 and update existing NULLs
+ALTER TABLE cart_items ALTER COLUMN discount_id SET DEFAULT 1;
+UPDATE cart_items SET discount_id = 1 WHERE discount_id IS NULL;

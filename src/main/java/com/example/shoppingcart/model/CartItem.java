@@ -41,6 +41,10 @@ public class CartItem {
         return totalPrice() * (1 - discountRate);
     }
 
+    public boolean isValidName() {
+        return name != null && name.matches("[a-zA-Z0-9\\s\\-.]+");
+    }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public User getUser() { return user; }

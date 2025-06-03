@@ -20,12 +20,18 @@ public class CartController {
 
     @PostMapping("/add-product")
     public ResponseEntity<?> addProduct(@RequestBody CartItem item) {
-        if (item.getName() == null || item.getName().isBlank() || item.getPrice() <= 0 || item.getQuantity() < 1) {
+        if (item.getName() == null || item.getName().isBlank() || item.getPrice() <= 0 || item.getQuantity() < 1
+                || !item.isValidName()) {
             return ResponseEntity.badRequest().body(
-                    Map.of("error", "Invalid product: Name must be non-empty, price and quantity must be positive"));
+                    Map.of("error",
+                            "Invalid product: Name must be non-empty, alphanumeric with spaces, hyphens, or periods, and price/quantity must be positive"));
         }
-        cartService.addProduct(item);
-        return ResponseEntity.ok().build();
+        try {
+            cartService.addProduct(item);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
     }
 
     @DeleteMapping("/remove-product/{name}")
@@ -33,9 +39,20 @@ public class CartController {
         cartService.removeProductByName(name);
     }
 
+    @PutMapping("/update-quantity")
+    public ResponseEntity<?> updateQuantity(@RequestParam String name, @RequestParam int quantity) {
+        try {
+            cartService.updateProductQuantity(name, quantity);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
     @GetMapping("/get-cart-items")
-    public List<CartItem> getCartItems() {
-        return cartService.getCartItems();
+    public List<CartItem> getCartItems(@RequestParam(defaultValue = "id") String sortBy,
+                                       @RequestParam(defaultValue = "asc") String sortDirection) {
+        return cartService.getCartItems(sortBy, sortDirection);
     }
 
     @GetMapping("/cart-total")
@@ -71,5 +88,10 @@ public class CartController {
     @PostMapping("/cart-total-discounted-items")
     public double cartTotalDiscountedItems(@RequestBody List<DiscountSelection> discountSelections) {
         return cartService.cartTotalWithDiscountSelections(discountSelections);
+    }
+
+    @GetMapping("/tax-rate")
+    public double getTaxRate() {
+        return cartService.getTaxRate();
     }
 }
